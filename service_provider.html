@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Provider Registration</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+
+    h2 { text-align: center; margin-bottom: 20px; color: #333; }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    .shake {
+      animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007BFF;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <h2>Service Provider Registration</h2>
+
+  <form id="providerForm" action="service_provider.php" method="POST">
+
+    <label>Name</label>
+    <input type="text" name="name" required>
+
+    <label>Age</label>
+    <input type="number" name="age" min="18" required>
+
+    <label>Gender</label>
+    <select name="gender" required>
+      <option value="">-- Select Gender --</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other</option>
+    </select>
+
+    <label>Contact Number</label>
+    <input type="tel" id="contact" name="contact" required>
+    <div class="error" id="contactError">Please fill 10 digits</div>
+
+    <label>GovID</label>
+    <input type="text" id="govid" name="govid" required>
+    <div class="error" id="govidError">GovID must be 12 digits</div>
+
+    <label>Alternative Contact (Optional)</label>
+    <input type="tel" id="altcontact" name="altcontact">
+    <div class="error" id="altError">Please fill 10 digits</div>
+
+    <label>Address</label>
+    <textarea name="address" rows="3" required></textarea>
+
+    <label>Experience (Years)</label>
+    <input type="number" name="experience" min="0" required>
+
+    <label>Skill (Construction)</label>
+    <select name="skill" required>
+      <option value="">-- Select Skill --</option>
+      <option value="painter">Painter</option>
+      <option value="carpenter">Carpenter</option>
+      <option value="electrician">Electrician</option>
+      <option value="plumber">Plumber</option>
+      <option value="mason">Mason</option>
+      <option value="household">Household Helper</option>
+    </select>
+
+    <label>Shifts</label>
+    <select name="shifts" required>
+      <option value="">-- Select Shift --</option>
+      <option value="day">Day</option>
+      <option value="night">Night</option>
+    </select>
+
+    <label>Username</label>
+    <input type="text" name="username" required>
+
+    <label>New Password</label>
+    <input type="password" id="newpassword" name="newpassword" required>
+
+    <label>Confirm Password</label>
+    <input type="password" id="confirmpassword" name="confirmpassword" required>
+    <div class="error" id="passError">The password is not matched</div>
+
+    <button type="submit">Register</button>
+  </form>
+</div>
+
+<script>
+const form = document.getElementById("providerForm");
+
+function shake(el) {
+  el.classList.add("shake");
+  setTimeout(() => el.classList.remove("shake"), 300);
+}
+
+// Auto add +91
+["contact", "altcontact"].forEach(id => {
+  document.getElementById(id).addEventListener("focus", function () {
+    if (!this.value.startsWith("+91")) this.value = "+91";
+  });
+});
+
+form.addEventListener("submit", function (e) {
+  let valid = true;
+
+  const contact = document.getElementById("contact");
+  const alt = document.getElementById("altcontact");
+  const govid = document.getElementById("govid");
+  const pass = document.getElementById("newpassword");
+  const cpass = document.getElementById("confirmpassword");
+
+  document.querySelectorAll(".error").forEach(err => err.style.display = "none");
+
+  if (contact.value.replace(/\D/g, "").slice(-10).length !== 10) {
+    document.getElementById("contactError").style.display = "block";
+    shake(contact);
+    valid = false;
+  }
+
+  if (alt.value && alt.value.replace(/\D/g, "").slice(-10).length !== 10) {
+    document.getElementById("altError").style.display = "block";
+    shake(alt);
+    valid = false;
+  }
+
+  if (!/^\d{12}$/.test(govid.value)) {
+    document.getElementById("govidError").style.display = "block";
+    shake(govid);
+    valid = false;
+  }
+
+  if (pass.value !== cpass.value) {
+    document.getElementById("passError").style.display = "block";
+    shake(cpass);
+    valid = false;
+  }
+
+  if (!valid) e.preventDefault();
+});
+</script>
+
+</body>
+</html>

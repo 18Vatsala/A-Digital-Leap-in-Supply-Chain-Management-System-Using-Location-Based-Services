@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login Form</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+    }
+    .container {
+      width: fit-content;
+      padding: 22px;
+      border: 2px solid #000;
+      background: #fff;
+    }
+    table {
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    td {
+      padding: 8px 12px;
+      vertical-align: middle;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 200px;
+      padding: 6px 8px;
+      box-sizing: border-box;
+    }
+    .actions {
+      font-size: 14px;
+    }
+    .actions button {
+      padding: 6px 14px;
+      align-items: center;
+      margin-right: 20px;
+      margin-left: 50px;
+      cursor: pointer;
+    }
+    .actions span {
+      font-style: italic;
+    }
+    .actions a {
+      margin-left: 8px;
+      text-decoration: none;
+      color: #007BFF;
+      cursor: pointer;
+    }
+    .actions a:hover {
+      text-decoration: underline;
+    }
+    #createOptions {
+      margin-top: 25px;
+      font-size: 14px;
+      display: none;
+    }
+    #createOptions a {
+      color: #007BFF;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    #createOptions a:hover {
+      text-decoration: underline;
+    }
+    #createOptions span {
+      margin: 0 6px;
+      font-style: normal;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="form" aria-labelledby="loginTitle">
+    <!-- ✅ added autocomplete="off" to form -->
+    <form method="POST" action="login.php" autocomplete="off">
+      <table>
+        <tr>
+          <td><label for="username">Username:</label></td>
+          <!-- ✅ changed autocomplete to off -->
+          <td><input type="text" id="username" name="username" autocomplete="off" required /></td>
+        </tr>
+        <tr>
+          <td><label for="password">Password:</label></td>
+          <!-- ✅ use new-password to avoid re-fill -->
+          <td><input type="password" id="password" name="password" autocomplete="off" required /></td>
+        </tr>
+      </table>
+      <div class="actions">
+        <button type="submit" aria-label="Login" id="loginButton">Login</button>
+        <span>or</span>
+        <a href="#" id="createAccountLink" aria-label="Create new account">Create new account?</a>
+      </div>
+    </form>
+
+    <div id="createOptions" aria-live="polite">
+      Create as 
+      <a href="service_provider.html" id="serviceProviderLink">service provider</a> 
+      <span>or</span> 
+      <a href="service_seeker.html" id="serviceSeekerLink">service seeker</a> 
+      account?
+    </div>
+  </div>
+
+  <script>
+    const createAccountLink = document.getElementById('createAccountLink');
+    const createOptions = document.getElementById('createOptions');
+    const loginButton = document.getElementById('loginButton');
+    const orSpan = createAccountLink.previousElementSibling;
+
+    createAccountLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      if (createOptions.style.display === 'none' || createOptions.style.display === '') {
+        createOptions.style.display = 'block';
+        loginButton.style.display = 'none';
+        createAccountLink.style.display = 'none';
+        if (orSpan) orSpan.style.display = 'none';
+      } else {
+        createOptions.style.display = 'none';
+        loginButton.style.display = 'inline-block';
+        createAccountLink.style.display = 'inline';
+        if (orSpan) orSpan.style.display = 'inline';
+      }
+    });
+     window.onload = function() {
+    // Always clear username & password when login.html loads
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+  };
+
+  // Extra safety: also handle back/forward navigation
+  window.addEventListener("pageshow", function(event) {
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+  });
+  </script>
+</body>
+</html>
